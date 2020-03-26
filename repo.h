@@ -28,7 +28,9 @@ public:
 	Input: &e - class, the Expense class object with reference
 	Output: -
 	*/
-	void addItem(Player& e);
+	void addItem(Player& p);
+	void updateItem(Player& p, char* newName, int newPG, int newNoWins);
+	void deleteItem(Player& p);
 	/*
 	Description: Returns the element at a specified position
 	Input: pos - int, the position
@@ -44,4 +46,5 @@ public:
 	*/
 	int getSize();
 };
-#endif#pragma once
+#endif
+#pragma once

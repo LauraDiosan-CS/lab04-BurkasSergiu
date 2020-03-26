@@ -1,6 +1,5 @@
 #pragma once
 
-#pragma once
 
 #ifndef PLAYER_H
 #define PLAYER_H
@@ -12,9 +11,12 @@ using namespace std;
 
 class Player {
 private:
+	char* name;
 	int noPG;
+	int noWins;
 
 public:
+	char* getName();
 	/*
 	Description: Returns the number of the apartment
 	Input: -
@@ -26,7 +28,11 @@ public:
 	Input: newApartmentNr - int, the new apartment number
 	Output: -
 	*/
-	void setNoPG(int newnoPG);
+	int getNoWins();
+
+	void setName(char* newName);
+	void setNoPG(int newNoPG);
+	void setNoWins(int newNoWins);
 	/*
 	Description: The following is a default constructor
 	Input: -
@@ -40,13 +46,14 @@ public:
 		   t - char*, the type
 	Output: -
 	*/
-	Player(int noPG);
+	Player(char* n,int noPlayedGames,int noWin);
+
 	/*
 	Description: The following is a copy constructor
 	Input: e - const class, the Player class object
 	Output: -
 	*/
-	Player(const Player& e);
+	Player(const Player& p);
 	/*
 	Description: The following is a destructor "~"
 	Input: -
@@ -58,13 +65,13 @@ public:
 	Input: e - class, the Player class object
 	Output: -
 	*/
-	bool compare(Player& e);
+	
+	bool operator==(Player& p);
 	/*
 	Description: create a new Expense (equal to a given Expense e)
 	Input: e - class, the Expense class object
 	Output: a new expense (equal to e)
 	*/
-	Player& operator=(const Player& e);
+	Player& operator=(const Player& p);
 };
-
 #endif
