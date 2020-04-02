@@ -34,58 +34,55 @@ void testPlayer() {
 }
 
 void testRepo() {
-
-	Repo repo;
-
-	char* nume1 = new char[10];
-	strcpy_s(nume1, 4, "Lea");
-	char* nume2 = new char[10];
-	strcpy_s(nume2, 5, "John");
-
-	Player p1(nume1,66,77);
-	Player p2(nume2,88,99);
-
+	Repo repo("TestPlayersIn.txt", "TestPlayersOut.txt");
+	Player p1("Silviu", 40, 40);
 	repo.addItem(p1);
+	int initialLen = repo.getSize();
+	Player p2("John", 20, 20);
 	repo.addItem(p2);
 
-	assert(repo.getSize() == 2);
+	vector<Player>playeri = repo.getAll();
 
-	assert(repo.getAll()[0].getNoPG() == p1.getNoPG());
-	assert(repo.getAll()[1].getNoPG() == p2.getNoPG());
+	assert(repo.getSize() == initialLen+1);
 
-	assert(repo.getAll()[0].getNoWins() == p1.getNoWins());
-	assert(repo.getAll()[1].getNoWins() == p2.getNoWins());
+	Player test("Victor", 15, 15);
+	repo.updateItem(playeri[1], test);
+	assert(repo.getItemAtPosition(1).getNoPG() == 15);
 
-	//assert(strcmp(repo.getAll()[0].getName(), nume1 == 0));
+	vector<Player>newPlayers = repo.getAll();
 
+	for (int i = 0; i < newPlayers.size(); i++)
+		repo.deleteItem(newPlayers[i]);
+	int currLen = repo.getSize();
+	assert(currLen == 0);
 }
 
 void testService() {
 
 	Repo repo;
-	Service service(repo);
-
+	Service service;
+	service.setRepo(repo);
+	
 	char* nume1 = new char[10];
 	strcpy_s(nume1, strlen("Lea") + 1, "Lea");
 	char* nume2 = new char[10];
 	strcpy_s(nume2, strlen("John") + 1, "John");
 
-	service.createItem(nume1, 66,77);
-	service.createItem(nume2, 88,99);
+	service.addItem(nume1, 66,77);
+	service.addItem(nume2, 88,99);
 
-	assert(service.readRepo().getSize() == 2);
+	vector<Player> playeri = service.getAll();
 
-	Player p1 = service.readRepo().getItemFromPos(0);
-	Player p2 = service.readRepo().getItemFromPos(1);
+	assert(playeri.size() == 2);
 
+	char emptyName[] = "nu exista";
+	Player emptyPlayer(emptyName, 0, 0);
+	assert(service.getItemAtPosition(-1).getNoPG() == emptyPlayer.getNoPG());
 
-	service.updateItem(p1, nume2,66,77);
+	service.updateItemByName(nume2, nume2, 5, 2);
+	assert(service.getItemAtPosition(1).getNoPG() == 5);
 
-	p1 = service.readRepo().getItemFromPos(0);
-	p2 = service.readRepo().getItemFromPos(1);
-
-	assert(p1 == p2);
-
-	service.deleteItem(p2);
-	assert(service.readRepo().getSize() == 1);
+	service.deleteItemByName(nume2);
+	playeri = service.getAll();
+	assert(playeri.size() == 1);
 }

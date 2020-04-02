@@ -1,50 +1,34 @@
 #pragma once
-
-#ifndef REPO_H
-#define REPO_H
 #include "player.h"
+#include <vector>
 
-using namespace std;
 
 class Repo {
 private:
-	Player playeri[100];
-	int noPlayer;
+	vector<Player> playeri;
+	char* fileNameIn;
+	char* fileNameOut;
 public:
-	/*
-	Description: The following is a default constructor
-	Input: -
-	Output: -
-	*/
 	Repo();
-	/*
-	Description: The following is a destructor
-	Input: -
-	Output: -
-	*/
+	Repo(const char* fileNameIn, const char* fileNameOut);
 	~Repo();
-	/*
-	Description: Adds an elements to the repository
-	Input: &e - class, the Expense class object with reference
-	Output: -
-	*/
-	void addItem(Player& p);
-	void updateItem(Player& p, char* newName, int newPG, int newNoWins);
-	void deleteItem(Player& p);
-	/*
-	Description: Returns the element at a specified position
-	Input: pos - int, the position
-	Output: expenses[pos] - class, the Expense class object at the specified position
-	*/
-	Player getItemFromPos(int pos);
+
+	void setFileNameIn(const char* fileNameIn);
+	void setFileNameOut(const char* fileNameIOut);
+
+	void addItem(Player p);
 	
-	Player* getAll();
-	/*
-	Description: Returns the size of the repository
-	Input: -
-	Output: noExpenses - int, the number of elements in the repository
-	*/
+	vector<Player> getAll();
+
 	int getSize();
+	Player getItemAtPosition(int pos);
+
+	void updateItem(Player& oldPlayer, Player& newPlayer);
+	
+	void deleteItem(Player& p);
+	
+	void loadFromFile();
+	
+	void saveToFile();
 };
-#endif
-#pragma once
+

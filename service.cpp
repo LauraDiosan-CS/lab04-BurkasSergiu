@@ -1,42 +1,86 @@
-#include <iostream>
-#include "repo.h"
-#include "player.h"
-#include "service.h"
 
-using namespace std;
+#include "service.h"
+#include "player.h"
 
 Service::Service() {
-	//cout << "This is a default constructor" << endl;
 }
 
-Service::Service(Repo r) {
-	//cout << "This is an implicit constructor with parameters" << endl;
-	repo = r;
-}
-
-Service::Service(const Service& s) {
-	//cout << "This is a copy constructor" << endl;
-	repo = s.repo;
+Service::Service(Repo &repo) {
+	this->repo=repo;
 }
 
 Service::~Service() {
-	//cout << "This is a destructor" << endl;
+	
 }
 
-void Service::createItem(char* nume, int noPG, int noWins) {
-	Player p(nume, noPG, noWins);
-	repo.addItem(p);
+void Service::setRepo(Repo repo)
+{
+	this->repo = repo;
 }
 
-void Service::updateItem(Player& p, char* newName, int newNoPG, int newNoWins) {
-	repo.updateItem(p, newName, newNoPG, newNoWins);
+void Service::addItem(const char* nume, int noPG, int noWins) {
+	this->repo.addItem(Player(nume, noPG, noWins));
 }
 
-void Service::deleteItem(Player& p) {
-	repo.deleteItem(p);
+vector<Player> Service::getAll()
+{
+	return this->repo.getAll();
 }
 
-//Repo e pentru ca returnez repo, iar Service
-Repo Service::readRepo() {
-	return this->repo;
+Player Service::getItemAtPosition(int pos)
+{
+	return this->repo.getItemAtPosition(pos);
 }
+
+void Service::updateItemByName(const char* name,const char* newName, int newNoPG, int newNoWins) {
+	vector<Player> playeri = this->repo.getAll();
+	Player newPlayer(newName, newNoPG, newNoWins);
+	for (int i = 0; i < this->repo.getSize(); i++)
+	{
+		if (strcmp(playeri[i].getName(), name) == 0)
+		{
+			Player oldPlayer(name, playeri[i].getNoPG(), playeri[i].getNoWins());
+			this->repo.updateItem(oldPlayer, newPlayer);
+			return;
+		}
+	}
+}
+
+void Service::deleteItemByName(const char* name) {
+	vector<Player> playeri = this->repo.getAll();
+	for (int i = 0; i < this->repo.getSize(); i++)
+	{
+		if (strcmp(playeri[i].getName(), name) == 0)
+		{
+			Player studentToDelete(name, playeri[i].getNoPG(), playeri[i].getNoWins());
+			this->repo.deleteItem(studentToDelete);
+			return;
+		}
+	}
+}
+
+vector<Player> Service::sortByPG(vector <Player> playeri,int size)
+{
+	Player aux;
+	for (int i = 0; i < size - 1; i++)
+		for (int j = 0; j < size - i - 1; j++)
+			if (playeri[j].getNoPG() < playeri[j + 1].getNoPG())
+			{
+				aux = playeri[j];
+				playeri[j] = playeri[j + 1];
+				playeri[j + 1] = aux;
+			}
+	return playeri;
+}
+
+void Service::showNoWins(Player playeri[], int &size)
+{
+	for (int i = 0; i < repo.getSize(); i++)
+	{
+		if (repo.getItemAtPosition(i).getNoWins() == 0)
+		{
+			playeri[++size] = repo.getItemAtPosition(i);
+		}
+	}
+}
+

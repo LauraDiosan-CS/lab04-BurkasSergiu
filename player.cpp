@@ -16,7 +16,7 @@ int Player::getNoWins() {
 	return this->noWins;
 }
 
-void Player::setName(char* newName) {
+void Player::setName(const char* newName) {
 	if (this->name) {
 		delete[] this->name;
 	}
@@ -40,7 +40,7 @@ Player::Player() {
 
 }
 
-Player::Player(char *nume,int noPlayedGames,int noWin) {
+Player::Player(const char *nume,int noPlayedGames,int noWin) {
 	
 	name = new char[strlen(nume) + 1];
 	strcpy_s(name, strlen(nume)+1, nume);
@@ -74,7 +74,7 @@ Player::~Player() {
 	}
 }
 
-bool Player::operator==(Player& p) {
+bool Player::operator==(const Player& p) {
 	return ((this->noPG == p.noPG) && (this->noWins = p.noWins) && (strcmp(this->name, p.name) == 0));
 }
 Player& Player::operator=(const Player& p) {
@@ -82,4 +82,11 @@ Player& Player::operator=(const Player& p) {
 	this->setNoWins(p.noWins);
 	this->setName(p.name);
 	return *this;
+
+}
+
+ostream& operator<<(ostream& os, const Player& p)
+{
+	os << p.name << " " << p.noPG << " " <<p.noWins;
+	return os;
 }
